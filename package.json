@@ -1,0 +1,44 @@
+{
+  "name": "tiny-source-map",
+  "version": "0.0.1",
+  "description": "A tiny implementation of SourceMapGenerator usable in ES Module, CommonJS, and Browser friendly formats",
+  "author": "Shane Holloway <shane.holloway@ieee.org> (http://shaneholloway.com)",
+  "license": "BSD-3-Clause",
+  "homepage": "https://github.com/shanewholloway/js-tiny-source-map#readme",
+  "bugs": {
+    "url": "https://github.com/shanewholloway/js-tiny-source-map/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/shanewholloway/js-tiny-source-map.git"
+  },
+  "files": [
+    "cjs/",
+    "esm/",
+    "umd/"
+  ],
+  "type": "module",
+  "main": "./cjs/tiny-source-map.cjs",
+  "module": "./esm/tiny-source-map.mjs",
+  "browser": "./umd/tiny-source-map.min.js",
+  "exports": {
+    "./": "./",
+    ".": {
+      "import": "./esm/tiny-source-map.mjs",
+      "require": "./cjs/tiny-source-map.cjs"
+    }
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "rollup": "^2.3.1",
+    "rollup-plugin-jsy-lite": "^1.5.5",
+    "rollup-plugin-terser": "^5.3.0",
+    "source-map": "^0.7.3"
+  },
+  "scripts": {
+    "build": "rollup --config",
+    "watch": "npm -s run build -- --watch",
+    "pretest": "npm -s run build",
+    "test": "true"
+  }
+}
