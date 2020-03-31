@@ -36,5 +36,5 @@ src_map.toString()
 
 ## License
 
-[BSD-3 Clause][./LICENSE]
+[BSD-3 Clause](./LICENSE)
 
