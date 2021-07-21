@@ -10,13 +10,13 @@ API:
       toJSON() {},
     }
 
-Inspired and extracted from 
+Inspired and extracted from
   require('source-map/lib/source-map-generator.js')
 
 */
 
 function tiny_source_map_generator(src_map) {
-  src_map ={version: 3, ... (src_map || {})};
+  src_map = {version: 3, ... (src_map || {}) };
 
   const sources = [];
   const names = [];
@@ -24,49 +24,56 @@ function tiny_source_map_generator(src_map) {
   const contents = new Map();
 
   return {
-    toJSON, toString: (() =>JSON.stringify(toJSON()))
+    toJSON, toString: () => JSON.stringify(toJSON()),
 
-  , setSourceContent(source, source_content) {
-      if (null != source_content) {
-        contents.set(`${source}`, source_content); }
-      else contents.delete(`${source}`); }
+    setSourceContent(source, source_content) {
+      if (null != source_content)
+        contents.set(`${source}`, source_content);
+      else contents.delete(`${source}`);
+    },
 
-  , addMapping({generated, original, source, name}) {
-      const m ={
+    addMapping({generated, original, source, name}) {
+      const m = {
         gl: generated.line,
         gc: generated.column,
         ol: original != null && original.line,
-        oc: original != null && original.column,};
+        oc: original != null && original.column, };
 
       if (null != source) {
         m.source = source = `${source}`;
-        if (! sources.includes(source)) {
-          sources.push(source); } }
+        if (! sources.includes(source))
+          sources.push(source);
+      }
 
       if (null != name) {
         m.name = name = `${name}`;
-        if (! names.includes(name)) {
-          names.push(name); } }
+        if (! names.includes(name))
+          names.push(name);
+      }
 
-      mappings.push(m);} }
+      mappings.push(m);
+    },
+  }
 
 
   function toJSON() {
-    const res_src_map ={
-      ... src_map
-    , sources: [... sources]
-    , names: [... names]};
+    const res_src_map = {
+      ... src_map,
+      sources: [... sources],
+      names: [... names]};
 
     res_src_map.mappings =
       _serializeMappings(
         mappings, res_src_map);
 
-    if (0 !== contents.size) {
+    if (0 !== contents.size)
       res_src_map.sourcesContent =
         res_src_map.sources.map(
-          key => contents.get(key) || null); }
+          key => contents.get(key) || null);
 
-    return res_src_map} }
+    return res_src_map
+  }
+}
 
 
 function _serializeMappings(mappings, src_map) {
@@ -84,13 +91,14 @@ function _serializeMappings(mappings, src_map) {
       vlq_gen_column(0);
       while (tip.gl !== line) {
         sz += ';';
-        line++;} }
+        line++;
+      }
+    } else if (undefined !== prev_tip) {
+      if (0 === cmp_srcmappings(tip, prev_tip))
+        continue // if we didn't move forward, ignore it!
 
-    else if (undefined !== prev_tip) {
-      if (0 === cmp_srcmappings(tip, prev_tip) ) {
-        continue }// if we didn't move forward, ignore it!
-
-      sz += ',';}
+      sz += ',';
+    }
 
     sz += vlq_gen_column(tip.gc);
 
@@ -100,22 +108,28 @@ function _serializeMappings(mappings, src_map) {
       sz += vlq_orig_column(tip.oc);
 
       if (tip.name != null) {
-        sz += vlq_name(src_map.names.indexOf(tip.name)); } }
+        sz += vlq_name(src_map.names.indexOf(tip.name));
+      }
+    }
 
     // success; move forward
     result += sz;
-    prev_tip = tip;}
+    prev_tip = tip;
+  }
 
-  return result}
+  return result
+}
 
 function _vlq_state(v0) {
   const vlq = v => {
     const res = _b64_vlq(v - v0);
     vlq.value = v0 = v;
-    return res};
+    return res
+  };
 
   vlq.value = v0;
-  return vlq}
+  return vlq
+}
 
 
 const strcmp = (a, b) =>
@@ -124,7 +138,8 @@ const strcmp = (a, b) =>
     : null == b ? -1
     : a > b ? 1 : -1;
 
-const cmp_srcmappings = (a,b) =>( a.gl - b.gl
+const cmp_srcmappings = (a,b) => (
+     a.gl - b.gl
   || a.gc - b.gc
   || strcmp(a.source, b.source)
   || a.ol - b.ol
@@ -147,8 +162,11 @@ function _b64_vlq(v) {
     v >>>= 5;
     if (0 === v) {
       res += _vlq_low[d];
-      return res}
+      return res
+    }
 
-    res += _vlq_high[d];} }
+    res += _vlq_high[d];
+  }
+}
 
 export default tiny_source_map_generator;
