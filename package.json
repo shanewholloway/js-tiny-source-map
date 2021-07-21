@@ -1,6 +1,6 @@
 {
   "name": "tiny-source-map",
-  "version": "0.0.1",
+  "version": "0.8.0",
   "description": "A tiny implementation of SourceMapGenerator usable in ES Module, CommonJS, and Browser friendly formats",
   "author": "Shane Holloway <shane.holloway@ieee.org> (http://shaneholloway.com)",
   "license": "BSD-3-Clause",
